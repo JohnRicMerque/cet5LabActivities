@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mission Statements</title>
   <style>
-    h1 {
-      text-align: center;
-    }
-
     .link-content-container {
       text-align: justify; 
       /* list-style-type: none; */
@@ -19,7 +15,7 @@
 
   <h1>Our Mission</h1>
 
-  <h3>Ensuring inclusive and equitable quality education and promoting lifelong learning opportunities through a re-engineered polytechnic university by committing to:</h3>
+  <h3>Ensuring inclusive and equitable quality education and promoting lifelong learning opportunities through a re-engineered university by committing to:</h3>
 
   <ul class="link-content-container">
     <li class="link-content-items">Provide Democratize access to educational opportunities for the holistic development of individuals with a global perspective.</li>

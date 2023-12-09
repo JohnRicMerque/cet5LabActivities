@@ -51,7 +51,7 @@ $gender = 'Male';
             padding: 1em;
             width: 23%;
             list-style-type: none;
-            height: 95%;
+            height: 100%;
             position: fixed;
             z-index: 1000;
         }
@@ -123,7 +123,7 @@ $gender = 'Male';
             display: flex;
             flex-direction: row;
             gap: 1em;
-            justify-content: center;
+            justify-content: space-between;
             align-items: right;
             font-size: 0.8rem;
         }
@@ -170,7 +170,7 @@ $gender = 'Male';
         <li><a href="lab9.php">Handling User Input – User Registration</a></li>
         <li><a href="lab10.php">Handling User Input – Dynamic Page</a></li>
         <li><a href="lab11.php">Managing State Information Using Session – Login Page</a></li>
-        
+        <li><a href="lab12.php">Managing State Information Using Cookies – Login Page</a></li>
     </nav>
 
     <div class="content">
@@ -187,6 +187,8 @@ $gender = 'Male';
 
         <main>
             <h2><?php echo LABTITLE; ?></h2>
+            <p><?php echo DESCRIPTION; ?></p>
+            <br />
             <?php 
                 echo '<table width="95%" border=1 style="border-collapse: collapse;">';
                 echo '<tr><td colspan=2><strong>My Academic Information</strong></td></tr>';

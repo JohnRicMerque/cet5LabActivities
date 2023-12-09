@@ -1,12 +1,82 @@
 <?php
+    session_start();
+    if (isset($_POST['username'])) {
+        if (isset($_POST['rememberme']))
+        setcookie('username',$_POST['username'], time() + 60 * 60);
+        else
+        setcookie('username','', time() - 60 * 60);
+       }
+
+    function generate_loginform() {
+        if (isset($_COOKIE['username']))
+            $username = $_COOKIE['username'];
+        else
+            $username = '';
+
+        echo '<form method="post" action="lab9.php">';
+        echo '  <label for="username">Username:</label>';
+        echo '  <input type="text" name="username" id="username" value="', htmlspecialchars($username), '" required>';
+        echo '  <br>';
+        echo '  <label for="password">Password:</label>';
+        echo '  <input type="password" name="password" id="password" required>';
+        echo '  <br>';
+        echo '  <input type="submit" name="login" value="Login">';
+        echo '  <input type="checkbox" name="rememberme" checked=checked> Remember me on this computer';
+        echo '</form>';
+    }
+
+    function process_form() {
+        if (isset($_POST['username']) && isset($_POST['password'])) {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+
+            if ((trim($username) != '') && ($password == '12345')) {
+                $_SESSION['username'] = $username;
+                $_SESSION['password'] = $password;
+                generate_welcomepage();
+            } else {
+                generate_loginerror();
+                generate_loginform();
+            }
+        }
+    }
+
+    function generate_loginerror() {
+        echo '<strong style="color: red;">Login Failed</strong>';
+    }
+
+    function process_logout() {
+        if (isset($_SESSION['username'])) {
+            echo '<strong style="color: green;">Logout Successful</strong>';
+            destroy_session();
+            generate_loginform();
+        }
+    }
+
+    function destroy_session() {
+        session_unset();
+        session_destroy();
+    }
+
+    function generate_welcomepage() {
+        $username = $_SESSION['username'];
+        echo '<p style="color: #181823;">Welcome back, <strong>' . $username . '</strong>! Enjoy your stay.</p>';
+        echo '<p style="font-style: italic; color: #181823;">A warm welcome to our platform. We are happy to see you!</p>';
+        echo '<form method="post" action="lab9.php">';
+        echo '  <input type="submit" name="logout" value="Logout" style="background-color: #181823; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">';
+        echo '</form>';
+    }
+
+    ?>
+<?php
 define('NAME', 'John Ric Merque');
 define('STUDENT_NUMBER', '2021-08128-MN-0');
 define('ADDRESS', 'Sampaloc, Manila');
 define('EMAIL_ADDRESS', 'johnricmer@gmail.com');
 define('CONTACT_NUMBER', '09986545461');
 define('WEBADDRESS', '+1 (123) 456-7890');
-define('LABTITLE', 'Laboratory Activity No. 7');
-define('DESCRIPTION', 'Regular Expression');
+define('LABTITLE', 'Laboratory Activity No. 12');
+define('DESCRIPTION', 'Managing State Information Using Cookies – Login Page');
 
 $school = 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES';
 $course = 'Bachelor of Science in Computer Engineering';
@@ -99,7 +169,12 @@ $gender = 'Male';
         main {
             align: right;
             padding: 0 5em 0 5em;
-            margin: 0 0 5% 0
+            margin: 0 0 5% 0;
+        }
+
+        .content-container {
+            display: grid;
+            place-items: center;
         }
 
         footer {
@@ -132,11 +207,11 @@ $gender = 'Male';
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            font-size: 0.8rem
         }
 
         th, td {
             border: 1px solid #181823; 
+            padding: 1%;
             text-align: center;
         }
 
@@ -146,9 +221,7 @@ $gender = 'Male';
         }
 
         td {
-            word-wrap: break-word;
-            width: auto;
-            padding: 1% 0 1% 0
+            width: 50%
         }
 
         tr:nth-child(even) {
@@ -156,46 +229,61 @@ $gender = 'Male';
             color: #000000; 
         }
 
-        .submit{
-            border: none;
-            padding: 0.5em 1em;
-            margin: 0;
-            text-decoration: none;
-            font-size: 16px;
-            cursor: pointer;
-            display: inline-block;
-            transition: background-color 0.3s ease;
-            background-color: #181823;
-            color: white;
-
-        }
-
-        .reset{
-            border: 1px gray solid;
-            padding: 0.5em 1em;
-            margin: 0;
-            text-decoration: none;
-            font-size: 16px;
-            cursor: pointer;
-            display: inline-block;
-            transition: background-color 0.3s ease;
+        main form {
             background-color: #FAF6F0;
-            color: black;
+            padding: 20px;
+            border: 1px solid black;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            width: 60%;
         }
 
-        input {
-            text-align: center;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            color: #333;
-            transition: border-color 0.3s;
+        main label {
+            display: block;
+            margin-bottom: 5px;
+            color: #181823;
         }
 
-        input:focus {
-            outline: none;
-            border-color: #181823;
+        main input[type="text"],
+        main input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid gray;
+            border-radius: 5px;
         }
+
+        main input[type="submit"] {
+            background-color: #181823;
+            width: 20%;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        main input[type="submit"]:hover {
+            background-color: #213555;
+        }
+
+        main p {
+            color: #ff0000;
+            margin-bottom: 10px;
+        }
+
+        main input[type="checkbox"] {
+            margin-top: 10px;
+            color: #181823;
+        }
+
+        main input[type="checkbox"]:checked {
+            color: #fff;
+        }
+
+
     </style>
 </head>
 
@@ -208,12 +296,13 @@ $gender = 'Male';
         <li><a href="lab4.php">Functions and Control Structures – Number to Words</a></li>
         <li><a href="lab5.php">Functions and Control Structures – Magic Square</a></li>
         <li><a href="lab6.php">String Functions in PHP</a></li>
-        <li><a href="lab7.php"><?php echo DESCRIPTION; ?></a></li>
+        <li><a href="lab7.php">Regular Expression</a></li>
         <li><a href="lab8.php">Array Manipulations – Word Counter</a></li>
         <li><a href="lab9.php">Handling User Input – User Registration</a></li>
         <li><a href="lab10.php">Handling User Input – Dynamic Page</a></li>
         <li><a href="lab11.php">Managing State Information Using Session – Login Page</a></li>
-        <li><a href="lab12.php">Managing State Information Using Cookies – Login Page</a></li>
+        <li><a href="lab12.php"><?php echo DESCRIPTION; ?></a></li>
+        <p><p>
     </nav>
 
     <div class="content">
@@ -230,75 +319,22 @@ $gender = 'Male';
 
         <main>
             <h2><?php echo LABTITLE; ?></h2>
-            <p><?php echo DESCRIPTION; ?></p>
-            <?php
-            
-            // SUPPLY THE MISSING PATTERN
-            // $patterns IS A TWO DIMENSIONAL ARRAY CONTAINING [description, regex]
-            $patterns[] = array('String containing "PHP"', 'PHP');
-            $patterns[] = array('Starting with "PHP"', '^PHP');
-            $patterns[] = array('Ends with "PHP"', 'PHP$');
-            $patterns[] = array('String equal to "PHP"', '^PHP$');
-            $patterns[] = array('Word starting with letter "C"', '^C\w*');
-            $patterns[] = array('Non-empty lowercase string', '^[a-z]+$');
-            $patterns[] = array('Non-empty uppercase string', '^[A-Z]+$');
-            $patterns[] = array('Minimum 10 letters Maximum 20 letters', '^.{10,20}$');
-            $patterns[] = array('Minimum 10 digits Maximum 20 digits', '^\d{10,20}$');
-            $patterns[] = array('Minimum 10 characters Maximum 20 characters', '^.{10,20}$');
-            $patterns[] = array('Valid PHP variable name', '^[a-zA-Z_]\w*$');
-            $patterns[] = array('Valid PHP constant name', '^[a-zA-Z_][a-zA-Z0-9_]*$');
-            $patterns[] = array('Valid decimal (base-10) integer', '^\d+$');
-            $patterns[] = array('Valid float number', '^\d*\.\d+$');
-            $patterns[] = array('5-letter string', '^[a-zA-Z]{5}$');
-            $patterns[] = array('5-digit string', '^\d{5}$');
-            $patterns[] = array('5 ascii characters', '^[ -~]{5}$');
-            $patterns[] = array('5 non-alphanumeric characters', '^[^a-zA-Z0-9]{5}$');
-            $patterns[] = array('Passing Grade (1.00,1.25,1.50 to 3.00)', '^(1\.00|1\.25|1\.50|1\.75|2\.00|2\.25|2\.50|2\.75|3\.00)$');
-            $patterns[] = array('Sub-domain Name (Ex. .edu or .ue.edu or .ccss.ue.edu)', '^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*$');
-
-            if (isset($_POST['reset'])) {
-                for ($i = 1; $i <= count($patterns); $i++) {
-                    $_POST["field$i"] = '';
-                }
-            }
-            
-            echo '<form method="post">';
-            $i = 1;
-            echo '<table border=1>';
-            echo '<tr><td colspan=5 align=center>Regular Expression Test</td></tr>';
-            echo '<tr><td>No.</td><td>Description</td><td>String</td><td>RegEx Pattern</td><td>Result</td>';
-            
-            foreach ($patterns as $pattern_item) {
-                $description = $pattern_item[0];
-                $pattern = $pattern_item[1];
-                $value = isset($_POST["field$i"]) ? $_POST["field$i"] : '';
-                if ($pattern == '') {
-                    $result = 'Missing pattern';
-                    $pattern = '&nbsp;';
-                } else {
-                    $pattern = '/' . $pattern . '/';
-                    if (preg_match($pattern, $value)) {
-                        $result = 'Valid';
-                    } else {
-                        $result = 'Invalid';
-                    }
-                }
-
-            echo "<tr>";
-            echo "<td>$i.</td><td>$description</td>";
-            echo "<td><input type=text name=\"field$i\" value=\"$value\"></td>";
-            echo "<td>$pattern</td>";
-            echo "<td style=\"background-color: " . ($result == 'Valid' ? '#D5FFE4' : '#FCAEAE') . ";\">$result</td>";
-            echo '<tr>';
-            $i++;
-        }
-
-        echo '</table><br />';
-        echo '<input class="submit" type="submit" name="validate" value="Validate Data">&nbsp';
-        echo '<input class="reset" type="submit" name="reset" value="Reset">&nbsp';
-        echo '</form>';
-        ?>
-
+            <span><?php echo DESCRIPTION; ?></span>
+            <br />
+            <div class="content-container">
+            <?php 
+                echo '<form method="post">';
+                if (isset($_POST['login']) > 0) // login button is clicked
+                 process_form();
+                elseif (isset($_POST['logout'])) // logout button is clicked
+                 process_logout();
+                elseif (isset($_SESSION['username'])) // check if user is logged in
+                 generate_welcomepage();
+                else
+                 generate_loginform(); // display login form
+                echo '</form>';       
+            ?>
+            </div>
         </main>
 
         <footer>

@@ -45,7 +45,7 @@ define('DESCRIPTION', 'String Functions in PHP');
             padding: 1em;
             width: 23%;
             list-style-type: none;
-            height: 95%;
+            height: 100%;
             position: fixed;
             z-index: 1000;
         }
@@ -117,7 +117,7 @@ define('DESCRIPTION', 'String Functions in PHP');
             display: flex;
             flex-direction: row;
             gap: 1em;
-            justify-content: center;
+            justify-content: space-between;
             align-items: right;
             font-size: 0.8rem;
         }
@@ -196,6 +196,7 @@ define('DESCRIPTION', 'String Functions in PHP');
         <li><a href="lab9.php">Handling User Input – User Registration</a></li>
         <li><a href="lab10.php">Handling User Input – Dynamic Page</a></li>
         <li><a href="lab11.php">Managing State Information Using Session – Login Page</a></li>
+        <li><a href="lab12.php">Managing State Information Using Cookies – Login Page</a></li>
     </nav>
     <div class="content">
         <header>
